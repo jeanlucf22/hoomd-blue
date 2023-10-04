@@ -70,6 +70,7 @@ void export_AnisoPotentialPairALJ2D(pybind11::module& m);
 void export_AnisoPotentialPairALJ3D(pybind11::module& m);
 void export_AnisoPotentialPairDipole(pybind11::module& m);
 void export_AnisoPotentialPairGB(pybind11::module& m);
+void export_AnisoPotentialPairTwoQ(pybind11::module& m);
 
 void export_PotentialBondHarmonic(pybind11::module& m);
 void export_PotentialBondFENE(pybind11::module& m);
@@ -212,6 +213,7 @@ void export_AnisoPotentialPairALJ2DGPU(pybind11::module& m);
 void export_AnisoPotentialPairALJ3DGPU(pybind11::module& m);
 void export_AnisoPotentialPairDipoleGPU(pybind11::module& m);
 void export_AnisoPotentialPairGBGPU(pybind11::module& m);
+void export_AnisoPotentialPairTwoQGPU(pybind11::module& m);
 
 void export_PotentialBondHarmonicGPU(pybind11::module& m);
 void export_PotentialBondFENEGPU(pybind11::module& m);
@@ -341,6 +343,7 @@ PYBIND11_MODULE(_md, m)
     export_AnisoPotentialPairALJ3D(m);
     export_AnisoPotentialPairDipole(m);
     export_AnisoPotentialPairGB(m);
+    export_AnisoPotentialPairTwoQ(m);
 
     export_PotentialPairDPDThermoDPD(m);
     export_PotentialPairDPDThermoLJ(m);
@@ -423,6 +426,7 @@ PYBIND11_MODULE(_md, m)
     export_AnisoPotentialPairALJ3DGPU(m);
     export_AnisoPotentialPairDipoleGPU(m);
     export_AnisoPotentialPairGBGPU(m);
+    export_AnisoPotentialPairTwoQGPU(m);
 
     export_PotentialBondHarmonicGPU(m);
     export_PotentialBondFENEGPU(m);
