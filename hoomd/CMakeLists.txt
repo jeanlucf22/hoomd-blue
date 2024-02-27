@@ -254,7 +254,7 @@ add_library (qtwo SHARED ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Quaternion.cc
                          ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/functions.cc
                          ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/quat_functions.cc
                          ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Potential.cc
-                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/PotentialDemo.cc
+                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/PotentialPrism.cc
                          ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Alpha.cc
                          ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Beta.cc
                          ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Phi.cc

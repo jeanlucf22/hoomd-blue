@@ -14,7 +14,7 @@
 
 #include "hoomd/VectorMath.h"
 #include "hoomd/extern/qtwo/src/Quaternion.h"
-#include "hoomd/extern/qtwo/src/PotentialDemo.h"
+#include "hoomd/extern/qtwo/src/PotentialPrism.h"
 
 /*! \file EvaluatorPairTwoQ.h
     \brief Defines a an evaluator class for the Gay-Berne potential
@@ -205,70 +205,46 @@ class EvaluatorPairTwoQ
         Qtwo::Quaternion qA(qi.s,qi.v.x,qi.v.y,qi.v.z);
         Qtwo::Quaternion qB(qj.s,qj.v.x,qj.v.y,qj.v.z);
         const double vr[3] = {dr.x,dr.y,dr.z};
-
-        Qtwo::PotentialDemo pot(qA, qB, vr);
-
+//std::cout<<"r="<<dr.x<<","<<dr.y<<","<<dr.z<<std::endl;
+std::cout<<"qa="<<qi.s<<","<<qi.v.x<<","<<qi.v.y<<","<<qi.v.z<<std::endl;
+std::cout<<"qb="<<qj.s<<","<<qj.v.x<<","<<qj.v.y<<","<<qj.v.z<<std::endl;
+std::cout<<"vr="<<vr[0]<<","<<vr[1]<<","<<vr[2]<<std::endl;
+        Qtwo::PotentialPrism pot(qA, qB, vr);
+pot.print(std::cout);
+        pair_eng = pot.evaluate();
+std::cout<<"Energy = "<<pair_eng<<std::endl;
         // compute torque on particle A
-        {
-        double dpotdqa0 = pot.derivdqa0();
-        double dpotdqa1 = pot.derivdqa1();
-        double dpotdqa2 = pot.derivdqa2();
-        double dpotdqa3 = pot.derivdqa3();
+        double tau0, tau1, tau2, tau3;
+        pot.torqueA(tau0,tau1,tau2,tau3);
+        const double tau0A = tau0;
+std::cout<<"Tau A = "<<tau1<<","<<tau2<<","<<tau3<<std::endl;
 
-        double tau0 = qA.q0()*dpotdqa0
-                    + qA.q1()*dpotdqa1
-                    + qA.q2()*dpotdqa2
-                    + qA.q3()*dpotdqa3;
-        double tau1 = -qA.q2()*dpotdqa0
-                    + qA.q3()*dpotdqa1
-                    + qA.q0()*dpotdqa2
-                    - qA.q1()*dpotdqa3;
-        double tau2 = qA.q1()*dpotdqa0
-                    + qA.q0()*dpotdqa1
-                    - qA.q3()*dpotdqa2
-                    - qA.q2()*dpotdqa3;
-        double tau3 = qA.q0()*dpotdqa0
-                    + qA.q1()*dpotdqa1
-                    + qA.q2()*dpotdqa2
-                    + qA.q3()*dpotdqa3;
-        torque_i = make_scalar3(tau1,tau2,tau3);
-        }
+        torque_i = make_scalar3(-0.5*tau1,-0.5*tau2,-0.5*tau3);
+//std::cout<<"tau="<<tau0<<","<<tau1<<","<<tau2<<","<<tau3<<std::endl;
 
         // compute torque on particle B
-        {
-        double dpotdqb0 = pot.derivdqb0();
-        double dpotdqb1 = pot.derivdqb1();
-        double dpotdqb2 = pot.derivdqb2();
-        double dpotdqb3 = pot.derivdqb3();
+        pot.torqueB(tau0,tau1,tau2,tau3);
+        const double tau0B = tau0;
+std::cout<<"Tau B = "<<tau1<<","<<tau2<<","<<tau3<<std::endl;
 
-        double tau0 = qB.q0()*dpotdqb0
-                    + qB.q1()*dpotdqb1
-                    + qB.q2()*dpotdqb2
-                    + qB.q3()*dpotdqb3;
-        double tau1 = -qB.q2()*dpotdqb0
-                    + qB.q3()*dpotdqb1
-                    + qB.q0()*dpotdqb2
-                    - qB.q1()*dpotdqb3;
-        double tau2 = qB.q1()*dpotdqb0
-                    + qB.q0()*dpotdqb1
-                    - qB.q3()*dpotdqb2
-                    - qB.q2()*dpotdqb3;
-        double tau3 = qB.q0()*dpotdqb0
-                    + qB.q1()*dpotdqb1
-                    + qB.q2()*dpotdqb2
-                    + qB.q3()*dpotdqb3;
-        torque_j = make_scalar3(tau1,tau2,tau3);
-        }
+        torque_j = make_scalar3(-0.5*tau1,-0.5*tau2,-0.5*tau3);
+//std::cout<<"tau="<<tau0B<<","<<tau1<<","<<tau2<<","<<tau3<<std::endl;
 
         // verify first component is 0
-
+        if(std::abs(tau0A+tau0B)>1.e-6)
+        {
+           std::cout<<"tau0A = "<<tau0A<<std::endl;
+           std::cout<<"tau0B = "<<tau0B<<std::endl;
+           std::cout<<"Expected tau0 = 0."<<std::endl;
+           abort();
+        }
         // compute vector force
-        const double fr = pot.derivdr();
+        const double fr = -1.*pot.devaldr();
         const double vrnomi = 1./std::sqrt(vr[0]*vr[0]+vr[1]*vr[1]+vr[2]*vr[2]);
         force.x = fr*vr[0]*vrnomi;
-        force.x = fr*vr[1]*vrnomi;
-        force.x = fr*vr[2]*vrnomi;
-
+        force.y = fr*vr[1]*vrnomi;
+        force.z = fr*vr[2]*vrnomi;
+//std::cout<<"f="<<force.x<<","<<force.y<<","<<force.z<<std::endl;
         return true;
         }
 
@@ -314,4 +290,4 @@ class EvaluatorPairTwoQ
     } // end namespace md
     } // end namespace hoomd
 
-#endif // __EVALUATOR_PAIR_GB_H__
+#endif // __EVALUATOR_PAIR_TWOQ_H__
