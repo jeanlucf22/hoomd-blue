@@ -230,6 +230,19 @@ class GayBerne(AnisotropicPair):
         """
         return super()._return_type_shapes()
 
+class TwoQ(AnisotropicPair):
+    _cpp_class_name = "AnisoPotentialPairTwoQ"
+
+    def __init__(self, nlist, default_r_cut=None, mode='none'):
+        super().__init__(nlist, default_r_cut, mode)
+        params = TypeParameter(
+            'params', 'particle_types',
+            TypeParameterDict(epsilon=float,
+                              lperp=float,
+                              lpar=float,
+                              len_keys=2))
+        self._add_typeparam(params)
+
 
 class ALJ(AnisotropicPair):
     r"""Anistropic LJ force.

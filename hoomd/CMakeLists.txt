@@ -246,6 +246,16 @@ endif()
 
 # add quick hull as its own library so that it's symbols can be public
 add_library (quickhull SHARED extern/quickhull/QuickHull.cpp)
+add_library (qtwo SHARED ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Quaternion.cc
+                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/functions.cc
+                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/quat_functions.cc
+                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Potential.cc
+                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/PotentialPrism.cc
+                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Alpha.cc
+                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Beta.cc
+                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Phi.cc
+                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Theta.cc
+                         ${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo/src/Gamma.cc)
 
 # ignore conversion warnings in quickull
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -259,7 +269,7 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # link the library to its dependencies
-target_link_libraries(_hoomd PUBLIC pybind11::pybind11 quickhull Eigen3::Eigen)
+target_link_libraries(_hoomd PUBLIC pybind11::pybind11 quickhull Eigen3::Eigen qtwo)
 if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
     target_link_libraries(_hoomd PUBLIC execinfo) # on FreeBSD backtrace() is in libexecinfo
 endif()
@@ -335,7 +345,7 @@ set_target_properties(_hoomd PROPERTIES INSTALL_RPATH "\$ORIGIN")
 endif()
 
 # install the library
-install(TARGETS _hoomd quickhull EXPORT HOOMDTargets
+install(TARGETS _hoomd quickhull qtwo EXPORT HOOMDTargets
         LIBRARY DESTINATION ${PYTHON_SITE_INSTALL_DIR}
         )
 
@@ -400,6 +410,7 @@ if (BUILD_MD)
     endif()
     add_subdirectory(md)
 endif()
+#add_subdirectory(${HOOMD_SOURCE_DIR}/hoomd/extern/qtwo)
 
 if (BUILD_HPMC)
     add_subdirectory(hpmc)

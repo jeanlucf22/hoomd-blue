@@ -26,3 +26,9 @@
 [submodule "sphinx-doc/tutorial"]
 	path = sphinx-doc/tutorial
 	url = https://github.com/glotzerlab/hoomd-examples
+[submodule "hoomd/qtwo"]
+	path = hoomd/qtwo
+	url = git@code.ornl.gov:q8j/qtwo.git
+[submodule "hoomd/extern/qtwo"]
+	path = hoomd/extern/qtwo
+	url = git@code.ornl.gov:q8j/qtwo.git

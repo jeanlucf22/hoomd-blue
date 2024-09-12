@@ -8,6 +8,7 @@ set(_md_sources module-md.cc
                    AnisoPotentialPairALJ3.cc
                    AnisoPotentialPairDipole.cc
                    AnisoPotentialPairGB.cc
+                   AnisoPotentialPairTwoQ.cc
                    AlchemyData.cc
                    BondTablePotential.cc
                    CommunicatorGrid.cc
@@ -99,6 +100,7 @@ set(_md_headers ActiveForceComputeGPU.h
                 EvaluatorPairGauss.h
                 EvaluatorPairExpandedGaussian.h
                 EvaluatorPairGB.h
+                EvaluatorPairTwoQ.h
                 EvaluatorPairLJ.h
                 EvaluatorPairLJ1208.h
                 EvaluatorPairLJ0804.h
